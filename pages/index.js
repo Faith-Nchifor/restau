@@ -3,14 +3,20 @@ import Image from 'next/image'
 import Link from 'next/link';
 import styles from '../styles/Home.module.css'
 import Header from '../components/header';
+import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home({datas}) {
+  const [restaus,setRestaus]=useState([])
+  const [id,setId]=useState(null)
+  const [loading,setLoading]=useState(false)
+  const router=useRouter()
   useEffect( ()=>{
-    
+    setLoading(true)
    axios.get('./api/restau/get').then(
       resp=>{
+        setRestaus(resp.data)
         console.log(resp.data);
       }
     ).catch(
@@ -18,10 +24,12 @@ export default function Home({datas}) {
         console.log(e);
       }
     )
+    .finally(()=>setLoading(false))
   
  
     
   },[])
+
   //console.log(users);
   return (
     <div className='container'>
@@ -31,6 +39,42 @@ export default function Home({datas}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         <Header/>
+        <h2>Available Restaurants</h2>
+          {loading===true &&(
+            <div className="spinner-border" role="status">
+              <span className="sr-only"></span>
+            </div>
+          )}
+        <div className='row'>
+        {
+          
+          restaus.map(r=>{
+          return(
+            <div className='col-11 col-md-4' key={r._id} onClick={()=>{
+              router.push({
+                pathname:'/restaurant/restaurant',
+                asPath:"resturants",
+                query:{
+                  id:r._id
+                }
+              })
+            }}>
+              <div className='card'>
+              <Image className='card-img'
+              src='https://images.squarespace-cdn.com/content/v1/5e04d1c138bd0a5d714cea2b/1626392332791-5COQ6EK3RC3RD1W1F2IP/achu-served-in-cameroon-cuisine-kengs-kitchen.jpg'
+              alt='food'
+              width={150}
+              height={120}
+              />
+              <p className='fs-3'>{r.name}</p>
+              <p >{r.city}</p>
+              </div>
+              
+            </div>
+          )
+        })}
+
+        </div>
       <main className={styles.main}>
         <h1 className={styles.title}>
         Welcome To Chop don done!

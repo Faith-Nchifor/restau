@@ -4,6 +4,7 @@ import Restaurant from '../../lib/models/restaurant';
 //import { getSession } from "next-auth/react"
 export default async function handler(req, res) {
      console.log('hi');
+    
      let {name,city,email}=req.body;
     
          let data={
