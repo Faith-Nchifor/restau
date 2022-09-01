@@ -7,7 +7,7 @@ export default async function handler(req, res) {
    
     try{
       await connectToDatabase();
-      Restaurant.find({}).then(
+      Restaurant.find().then(
         result=>{
           console.log(result)
           res.status(200).send(result)

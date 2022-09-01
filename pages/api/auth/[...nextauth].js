@@ -16,8 +16,6 @@ export default NextAuth({
     callbacks:{
         async signIn({ user, account, profile, email, credentials }) {
             try{
-              console.log('google user id');
-              console.log(user);
                 await connectToDatabase();
                 let user= await Restaurant.findOne({email:profile.email})
             if (user!==null) {

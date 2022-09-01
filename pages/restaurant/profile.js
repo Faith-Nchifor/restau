@@ -16,8 +16,7 @@ export default function Profile(){
             setUserData({
                 name:data.name,
                 email:data.email,
-                city:data.city,
-                id:data._id
+                city:data.city
             })
         })
         .catch(e=>{
@@ -29,8 +28,7 @@ export default function Profile(){
     const [userData,setUserData]=useState({
         name:'',
         email:'',
-        city:'',
-        id:null
+        city:''
     })
     return(
         <div className="col col-10 col-md-8 col-md-6 mx-auto">
