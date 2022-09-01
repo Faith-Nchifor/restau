@@ -1,6 +1,9 @@
 import Head from 'next/head'
 import {useState} from 'react';
 import { useRouter } from 'next/router';
+import Header from '../components/header';
+import axios from 'axios';
+import {  signIn } from "next-auth/react"
 
 export default function NewRestaurant() {
     let restaurants=[];
@@ -9,7 +12,8 @@ export default function NewRestaurant() {
         name:'',
         city:'',
         email:'',
-        password:''
+        password:'',
+        //street:""
     })
     const editRestau=(e)=>{       
         setRestau({
@@ -21,33 +25,28 @@ export default function NewRestaurant() {
         e.preventDefault();
         //console.log(restau);
         restaurants.push(restau);
-        try{
-             fetch('/api/restaurants',{
-                body:JSON.stringify(restau),
-                method:'POST'
-            })
+        
+             axios.post('http://localhost:3000/api/restaurant',
+                restau 
+            )
             .then(resp=>{
-                if(resp.ok)
-               return resp.json()
-            })
-            .then(resp=>{
-                console.log(resp);
+                
                 alert('success')
-                router.push('/login')
-                /* setRestau({
-            name:'',
-            city:'',
-            email:'',
-            password:''
-        })*/
+                console.log(resp.data)
+                router.push('/')
+               // signIn('google')
+            
+               
             })
+            
             .catch(e=>{
-                console.log(e);
+                console.log('error...');
+                //console.log(e.response);
+                if(e.response && e.response.status==400)
+                alert (e.response.data);
+                else alert (e)
+                
             })
-        }
-        catch(e){
-            console.log(e);
-        }
        
 
     }
@@ -56,6 +55,7 @@ export default function NewRestaurant() {
         <Head>
         <title>New Restaurant</title>
         </Head>
+        <Header/>
         <h2 className='text-center'>Register New Restaurant</h2>
         <div className='col-sm-12 col-md-6 col-lg-5 mx-auto'>
         <form onSubmit={addRestaurant}>
