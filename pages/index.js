@@ -4,14 +4,16 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.css'
 import Header from '../components/header';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home({datas}) {
+  const [restaus,setRestaus]=useState([])
   useEffect( ()=>{
     
    axios.get('./api/restau/get').then(
       resp=>{
         console.log(resp.data);
+        setRestaus(resp.data)
       }
     ).catch(
       e=>{
